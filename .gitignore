@@ -123,3 +123,7 @@ dmypy.json
 config/pihome_env
 
 vault/*
+
+**/settings.py
+/webservers/pihomeweb/pihomeweb/settings.py
+/webservers/pihomeinterface/pihomeinterface/settings.py
