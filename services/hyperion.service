@@ -1,0 +1,19 @@
+[Unit]
+Description=Hyperion service to run daemon for ambilight
+Documentation=https://docs.hyperion-project.org/
+After=display-manager.service
+
+[Service]
+Type=idle
+User=root
+Group=root
+ExecStart=/usr/bin/hyperiond
+ExecReload=/usr/local/bin/kill --signal HUP $MAINPID
+KillSignal=SIGINT
+WorkingDirectory=/usr/share/hyperion/bin/
+Restart = on-failure
+RestartSec = 2
+StandardOutput=file:/opt/pihome/logs/hypoerion.log
+
+[Install]
+WantedBy=multi-user.service

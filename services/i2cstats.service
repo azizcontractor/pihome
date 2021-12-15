@@ -1,0 +1,14 @@
+[Unit]
+Description=I2C Stats Display for PiDesktop
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/home/pi/OLED_Display/display_stats.py
+ExecReload=/usr/local/bin/kill --signal HUP $MAINPID
+KillSignal=SIGINT
+WorkingDirectory=/home/pi/OLED_Display/
+
+[Install]
+WantedBy=multi-user.target

@@ -3,7 +3,7 @@
 """
 Interface to vault credential manager
 File: vault_mgr
-Project: lib
+Project: PiHome
 File Created: Monday, 25th October 2021 8:50:09 pm
 Author: Aziz Contractor
 -----
@@ -30,8 +30,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -----
 """
+import logging
 import hvac
 from typing import List, Dict
+
+_LOG = logging.getLogger(__name__)
 
 
 class VaultMgr:
@@ -58,9 +61,11 @@ class VaultMgr:
             role_id (str): The app role id.
             secret_id (str): The secret id for the app role.
         """
-        self.client = hvac.Client(endpoint)
-        self.role_id = role_id
+        _LOG.debug(f"Connecting to vault server {endpoint}.")
+        self.endpoint = endpoint
+        self.client = hvac.Client(self.endpoint)
         self.secret_id = secret_id
+        self.role_id = role_id
         self._authenticate()
         self.client.secrets.kv.default_kv_version = self.KV_VERSION
 
@@ -70,6 +75,7 @@ class VaultMgr:
         """
         if self.client.is_authenticated():
             return
+        _LOG.debug(f"Authenticating for app role {self.role_id}")
         self.client.auth.approle.login(role_id=self.role_id, secret_id=self.secret_id)
 
     def get_secret(self, path: str) -> Dict[str, str]:
@@ -84,6 +90,7 @@ class VaultMgr:
         """
         if not self.client.is_authenticated():
             self._authenticate()
+        _LOG.info(f"Getting secret for path {path}")
         secret = self.client.secrets.kv.read_secret(path=path, mount_point=self.MOUNT_POINT)
         return secret["data"]
 
@@ -96,9 +103,10 @@ class VaultMgr:
             path (str): The path for the secrets. Defaults to "".
 
         Returns:
-            list: Containing all secrets at the current path.
+            List[str]: Containing all secrets at the current path.
         """
         if not self.client.is_authenticated():
             self._authenticate()
+        _LOG.info(f"Listing secrets for path {path}")
         secrets = self.client.secrets.kv.list_secrets(path=path, mount_point=self.MOUNT_POINT)
         return secrets["data"]["keys"]

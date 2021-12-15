@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% load static %} {% block scripts %}
+<script type="text/javascript" src="{% static 'homedata.js' %}"></script>
+{% endblock scripts %}
+
+{% block functions %}
+<script>
+  $(document).ready(function () {
+      load_solar_data()
+      setInterval(function () {
+        load_solar_data();
+      }, 60000);
+      load_sensor_data()
+      setInterval(function () {
+        load_sensor_data();
+      }, 60000);
+      load_network_data();
+      setInterval(function () {
+        load_network_data();
+      }, 300000);
+  });
+</script>
+{% endblock functions %} 
+{% block content %}
+<h4 class="w3-center">Solar Data</h4>
+<div id="solar_data" class="w3-container"></div>
+<h4 class="w3-center">Environment Data</h4>
+<div id="sensor_data" class="w3-container"></div>
+<h4 class="w3-center">Network Data</h4>
+<div id="network_data" class="w3-container w3-margin-bottom"></div>
+{% endblock content %}

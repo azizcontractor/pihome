@@ -1,0 +1,118 @@
+<!DOCTYPE html> {% load static %}
+<head>
+  <title>PiHome</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  <link rel="icon" href="{% static 'picturepi_logo.png' %}" />
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+  <script src="https://kit.fontawesome.com/1ad995461a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'custom_style.css' %}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{% static 'base.js' %}"></script>
+  <script type="text/javascript" src="{% static 'pidata.js' %}"></script>
+  {% block scripts %} {% endblock scripts %}
+  <script>
+    $(document).ajaxStart(function () {
+      $("div#loading_modal").show();
+    });
+    $(document).ajaxComplete(function () {
+      $("div#loading_modal").hide();
+    });
+    $(document).ajaxError(function (_, error_dict, _) {
+      show_ajax_error(error_dict);
+    });
+    $(document).ready(function () {
+      var modals = document.getElementsByName("modal");
+      window.onclick = function (event) {
+        for (var i = 0; i < modals.length; i++) {
+          if (event.target == modals[i]) {
+            modals[i].style.display = "none";
+          }
+        }
+      };
+    });
+    $(document).ready(function () {
+      get_time();
+      setInterval(function () {
+        get_time();
+      }, 10000);
+      get_location();
+      setInterval(function () {
+        get_location();
+      }, 300000);
+      get_notifications();
+      let notify_interval_id = setInterval(function () {
+        get_notifications();
+      }, 30000);
+      get_quote();
+      setInterval(function () {
+        get_quote();
+      }, 300000);
+    });
+  </script>
+  {% block functions %} {% endblock functions %}
+</head>
+
+<body class="w3-black">
+  <div id="loading_modal" name="loading_div" class="w3-modal w3-center">
+    <div class="w3-modal-content w3-light-gray w3-center">
+      <div class="w3-card-4 w3-white w3-center">
+        <h3>Loading Data</h3>
+        <h3>
+          <i class="material-icons md-48 w3-spin">cached</i>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div id="saving_modal" name="saving_div" class="w3-modal w3-center">
+    <div class="w3-modal-content w3-light-gray w3-center">
+      <div class="w3-card-4 w3-white w3-center">
+        <h3>Saving</h3>
+        <h3>
+          <i class="material-icons md-48 w3-spin">cached</i>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div id="error_modal" name="modal" class="w3-modal w3-animate-zoom">
+    <div class="w3-modal-content w3-panel w3-red">
+      <header class="w3-container">
+        <span
+          onclick="document.getElementById('error_modal').style.display='none'"
+          class="w3-button w3-display-topright w3-text-white material-icons md-48"
+          >clear</span
+        >
+        <h2>Data Retrieval Error</h2>
+      </header>
+      <div id="alert_div" class="w3-container w3-padding-16" name="alert_div"></div>
+    </div>
+  </div>
+  <div id="msg_modal" name="modal" class="w3-modal w3-animate-zoom">
+    <div class="w3-modal-content w3-panel w3-white">
+      <header class="w3-container">
+        <span
+          onclick="document.getElementById('msg_modal').style.display='none'"
+          class="w3-button w3-display-topright material-icons md-48"
+          >clear</span
+        >
+        <h2 id="msg_title"></h2>
+      </header>
+      <div id="msg_div" class="w3-container w3-padding-16" name="alert_div"></div>
+    </div>
+  </div>
+  {% block modals %} {% endblock modals %}
+  <div id="nav_div" class="w3-top w3-bar w3-black">
+    <a href="{% url 'home:index' %}" class="w3-bar-item w3-button" title="Home"><i class="fas fa-home fa-2x"></i></a>
+    <a href="{% url 'piframe:index' %}" class="w3-bar-item w3-button" title="Picture Slideshow"><i class="fas fa-image fa-2x"></i></a>
+    <a href="{% url 'homedata:index' %}" class="w3-bar-item w3-button" title="Home Stats"><i class="fas fa-info fa-2x"></i></a>
+    <button class="w3-bar-item w3-button w3-right" title="Notifications" id="notify_alarm" onclick="notify_open()"><i class="fas fa-bell fa-2x"></i></button>
+    {% block baritems %}
+    {% endblock baritems %}
+  </div>
+  <br /><br /><br />
+  <div id="main_div" name="main_div" class="w3-row">
+    {% include 'sidebar.html' %}
+    <div id="info_div" class="w3-container w3-quarter" style="overflow-y: hidden; max-heght:100%">{% include 'dataframe.html' %}</div>
+    <div class="w3-container w3-rest">{% block content %} {% endblock content %}</div>
+  </div>
+</body>

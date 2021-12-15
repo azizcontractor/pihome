@@ -1,0 +1,81 @@
+{% extends 'base.html' %}{% load static %}
+{% block scripts %}
+<script type="text/javascript" src="{% static 'home.js' %}"></script>
+{% endblock scripts %}
+
+{% block modals %}
+  <div id="reboot_modal" name="loading_div" class="w3-modal w3-center">
+    <div class="w3-modal-content w3-light-gray w3-center">
+      <div class="w3-card-4 w3-white w3-center">
+        <h3>Rebooting Servers</h3>
+        <h3>
+          <i class="material-icons md-48 w3-spin">cached</i>
+        </h3>
+      </div>
+    </div>
+  </div>
+{% endblock modals %}
+
+{% block content %}
+<div class="w3-margin-bottom w3-small w3-row-padding" style="cursor:none;">
+    <div class="w3-col s4 w3-center">
+        <a href="{% url 'home:show_slides' %}">
+        <button class="w3-button w3-hover-blue">
+            <i class="fas fa-images fa-5x"></i>
+            <h6>Slideshow</h6>
+        </button>
+        </a>
+    </div>
+    <div class="w3-col s4 w3-center">
+        <a href="{% url 'home:show_info' %}">
+        <button class="w3-button w3-hover-blue">
+            <i class="fas fa-info fa-5x"></i>
+            <h6>Home Data</h6>
+        </button>
+        </a>
+    </div>
+    <div class="w3-col s4 w3-center">
+        <a href="{% url 'home:show_system' %}">
+        <button class="w3-button w3-hover-blue">
+            <i class="fas fa-cogs fa-5x"></i>
+            <h6>System Info</h6>
+        </button>
+        </a>
+    </div>
+</div>
+<div class="w3-margin-bottom w3-small w3-row-padding" style="cursor:none;">
+    <div class="w3-col s4 w3-center">
+        <a href="{% url 'home:toggle_notify' %}"
+    {% if notify_shown %}
+        <button class="w3-button w3-hover-blue">
+            <i class="fas fa-bell-slash fa-5x"></i>
+            <h6>Hide<br/>Notifications</h6>
+    {% else %}
+        <button class="w3-button w3-hover-blue">
+            <i class="fas fa-bell fa-5x"></i>
+            <h6>Show<br/>Notifications</h6>
+    {% endif %}
+        </button>
+        </a>
+    </div>
+    <div class=" w3-col s4 w3-center">
+    {% if  notify_shown %}
+        <a href="{% url 'home:clear_notify' %}"
+        <button class="w3-button w3-hover-blue">
+    {% else %}
+        <a href="#">
+        <button class="w3-button w3-hover-blue" disabled>
+    {% endif %}
+            <i class="fas fa-envelope-open-text fa-5x"></i>
+            <h6>Clear<br/>Notifications</h6>
+        </button>
+        </a>
+    </div>
+    <div class="w3-col s4 w3-center">
+        <button class="w3-button w3-hover-blue" onclick="reboot()">
+            <i class="fas fa-power-off w3-text-red fa-5x"></i>
+            <h6>Reboot<br/>System</h6>
+        </button>
+    </div>
+</div>
+{% endblock content %}

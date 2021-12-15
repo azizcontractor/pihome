@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=PiHomeBrowser
+Comment=Start web browser for pihome
+Exec=/opt/pihome/scripts/display_controller.py

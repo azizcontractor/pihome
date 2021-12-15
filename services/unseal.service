@@ -1,0 +1,15 @@
+[Unit]
+Description=Unseal the vault on startup
+After=network.target vault.service
+
+[Service]
+Type=oneshot
+User=pi
+Group=pi
+ExecStart=/opt/pihome/scripts/vault_unseal.py
+KillSignal=SIGTERM
+WorkingDirectory=/opt/pihome/
+EnvironmentFile=/opt/pihome/.env/unseal.env
+
+[Install]
+WantedBy=multi-user.target

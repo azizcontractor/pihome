@@ -1,0 +1,15 @@
+[Unit]
+Description=Environment data manager for PiHome
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+ExecStart=/opt/pihome/scripts/sensor_mgr.py
+ExecReload=/usr/local/bin/kill --signal HUP $MAINPID
+KillSignal=SIGTERM
+WorkingDirectory=/opt/pihome/
+EnvironmentFile=/opt/pihome/.env/sensornode.env
+
+[Install]
+WantedBy=multi-user.target

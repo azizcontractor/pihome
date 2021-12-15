@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 """
-Manages the database for pihome
-File: db_mgr
-Project: lib
-File Created: Monday, 25th October 2021 9:46:05 pm
+Init file for PiHome
+File: __init__
+Project: PiHome
+File Created: Tuesday, 26th October 2021 7:14:11 pm
 Author: Aziz Contractor
 -----
 MIT License
@@ -30,14 +30,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -----
 """
-import psycopg2
-
-
-class DBMgr:
-    def __init__(self, host: str, user: str, password: str, database: str, schema: str) -> None:
-        self.host = host
-        self.user = user
-        self.password = password
-        self.database = database
-        self.schema = schema
-        self.conn = psycopg2.connect(host=host, user=user, password=password, dbname=database)

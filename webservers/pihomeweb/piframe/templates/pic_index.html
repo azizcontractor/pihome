@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% load static %} {% block scripts %}
+<script type="text/javascript" src="{% static 'piframe.js' %}"></script>
+{% endblock scripts %}
+{% block baritems %}
+<a href="{% url 'piframe:manage' %}" class="w3-bar-item w3-button w3-right" title="Manage Pictures"><i class="fas fa-edit fa-2x"></i></a>
+{% endblock baritems %}
+
+{% block functions %}
+<script>
+  $(document).ready(function () {
+    load_new_img();
+    setInterval(function () {
+      load_new_img();
+    }, 30000);
+  });
+</script>
+{% endblock functions %} 
+{% block content %}
+<div
+  id="img_div"
+  style="overflow-Y: hidden; overflow-X: hidden; vertical-align: middle; height: 1000px; width: 1400px; white-space: nowrap; text-align: center;"
+  valign="middle"
+>
+  <span style="display: inline-block; height: 100%; vertical-align: middle;"></span>
+</div>
+{% endblock content %}
+

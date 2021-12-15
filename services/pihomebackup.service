@@ -1,0 +1,15 @@
+[Unit]
+Description=Backup Utility for PiHome
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/opt/pihome/scripts/backup.py
+ExecReload=/usr/local/bin/kill --signal HUP $MAINPID
+KillSignal=SIGTERM
+WorkingDirectory=/opt/pihome/
+EnvironmentFile=/opt/pihome/.env/backup.env
+
+[Install]
+WantedBy=multi-user.target

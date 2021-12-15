@@ -1,0 +1,35 @@
+{% extends 'base.html' %}{% load static %} {% block content %}
+<div style="max-width:600px; margin: 0 auto;">
+<h3 class="w3-center">Upload New Image</h3> 
+<form method="post" class="w3-container w3-card-black-4 w3-black w3-padding-16" enctype="multipart/form-data" onsubmit="$('div#saving_modal').show()">
+  {% csrf_token %}
+  <ul class="w3-ul">
+    {{ form.as_ul }}
+  </ul>
+  <div class="w3-center">
+    <button class="w3-button w3-blue" type="submit">Upload</button>
+  </div>
+</form>
+</div>
+<br><br>
+<div class="w3-container">
+<h3 class="w3-center">Manage Previously Uploaded Images</h3>
+{% for img_id,img_src in images.items %}
+{% if forloop.counter0|divisibleby:3 %}
+</div>
+<br>
+<div class="w3-row">
+{% endif %}
+  <div class="w3-third w3-container w3-center w3-card-black-2">
+    <img src="{{ img_src }}" class="w3-margin-bottom" style="max-height:256px; max-width:256px"/>
+    <form class="w3-container" method="POST" action="{% url 'piframe:delete' %}">
+      {% csrf_token %}
+      <input type="hidden" value="{{ img_id }}" name="img_id" />
+      <button type="submit" class="w3-button w3-red">
+        <i class="fas fa-trash-alt"></i>&nbsp;Delete
+      </button>
+    </form>
+  </div>
+{% endfor %}
+</div>
+{% endblock content %}

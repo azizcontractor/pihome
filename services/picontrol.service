@@ -1,0 +1,16 @@
+[Unit]
+Description=PiHome Control Touch Display
+Documentation=https://vaultproject.io/docs/
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/python3 /opt/pihome/webservers/pihomeinterface/manage.py runserver 0:8000
+ExecReload=/usr/local/bin/kill --signal HUP $MAINPID
+KillSignal=SIGINT
+EnvironmentFile=/opt/pihome/.env/datanode.env
+WorkingDirectory=/opt/pihome/
+
+[Install]
+WantedBy=multi-user.target
